@@ -14,8 +14,8 @@ Daarnaast wordt geluistert naar test resultaat events, die toegevoegd worden aan
 Vanuit een externe service wordt het 'gemiddelde aantal slagende testen' opgehaald, zodat ieder project een Rating kan krijgen hoe goed deze presteert ten opzichte van het gemiddelde.
 
 ## Cucumber configuratie
-- CucumberRunnerTest.java is onze test runner met annotations om cucumber vanuit junit te kunnen draaien
-- ComponentTestConfiguration.java bevat de configuratie om spring op te starten voor de component testen
+- io.componenttesting.testmanager.CucumberRunnerTest.java is onze test runner met annotations om cucumber vanuit junit te kunnen draaien
+- io.componenttesting.testmanager.ComponentTestConfiguration.java bevat de configuratie om spring op te starten voor de component testen
 - ApiSteps.java bevat step definitions met rest assured logica
 - EventSteps.java bevat step definitions met spring event messaging
 - TestdataSteps.java bevat step definitions om testdata te vullen via de Dao's
@@ -74,7 +74,7 @@ stappen om component testen op te zetten:
    zet hier een breakpoint op een stuk code om te kijken wat faalt
    resultaat is dat de applicatie een 500 teruggeeft omdat de dependency service niet gevonden kan worden
 
-6. Voeg wiremock rule toe aan CucumberRunnerTest, de wiremock dependency en de mappings
+6. Voeg wiremock rule toe aan io.componenttesting.testmanager.CucumberRunnerTest, de wiremock dependency en de mappings
    resultaat is dat het scenario nu slaagt
 
 7. Voeg nog een extra scenario toe die dekt dat het toevoegen van een scenario uniek moet zijn
