@@ -6,7 +6,6 @@ import io.componenttesting.api.ProjectsApi;
 import io.componenttesting.model.ProjectCreate;
 import io.componenttesting.model.ProjectResponse;
 import io.componenttesting.testmanager.service.ProjectService;
-import io.swagger.annotations.ApiParam;
 import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
