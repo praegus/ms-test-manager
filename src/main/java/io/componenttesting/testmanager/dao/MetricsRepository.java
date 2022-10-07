@@ -15,6 +15,10 @@ public class MetricsRepository {
     private RestTemplate restTemplate;
 
     public AverageTestResults getAverageTestPassing() {
-        return restTemplate.getForObject(metricsEndpoint + "/average-passing-tests", AverageTestResults.class);
+        try {
+            return restTemplate.getForObject(metricsEndpoint + "/average-passing-tests", AverageTestResults.class);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
