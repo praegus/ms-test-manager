@@ -3,49 +3,18 @@ package io.componenttesting.testmanager.steps;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.componenttesting.model.TestDataEvent;
-import io.componenttesting.testmanager.event.TestManagerSink;
-import io.componenttesting.testmanager.event.TestManagerSource;
-import io.cucumber.java.Before;
-import io.cucumber.java.en.Then;
+import io.componenttesting.testmanager.event.KafkaConsumerService;
 import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.stream.test.binder.MessageCollector;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
-
-import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.stream.Collectors;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class EventSteps {
 
     @Autowired
-    private TestManagerSink routingSink;
-
-    @Autowired
-    private MessageCollector collector;
-
-    @Autowired
-    private TestManagerSource routingSource;
-
-    @Before
-    public void before() {
-        collector.forChannel(routingSource.output()).clear();
-    }
+    private KafkaConsumerService consumerService;
 
     @When("project {string} has received the following testdata:")
-    public void sendTestData(String project, String testDataEvent) {
+    public void sendTestData(String project, String testDataEvent) throws JsonProcessingException {
         sendInEvent(project, testDataEvent);
-    }
-
-    @Then("the following message will be published {string}")
-    public void checkPublish(String message) {
-        List<String> payloads = getOutputJson();
-        assertThat(payloads.size()).isEqualTo(1);
-        String actualMessage = payloads.get(0);
-        assertThat(actualMessage).isEqualTo(message);
     }
 
     @When("project {string} has received {int} passing tests and {int} failing tests")
@@ -69,16 +38,7 @@ public class EventSteps {
         }
     }
 
-    protected List<String> getOutputJson() {
-        BlockingQueue<Message<?>> messages = collector.forChannel(routingSource.output());
-        return messages.stream().map(m -> m.getPayload().toString()).collect(Collectors.toList());
-    }
-
-    private void sendInEvent(String projectName, String content) {
-        routingSink.sourceOfTeamMorale().send(MessageBuilder.
-                withPayload(content).
-                setHeader("eventType", "TEST_EVENT").
-                setHeader("projectName", projectName).
-                build());
+    private void sendInEvent(String projectName, String content) throws JsonProcessingException {
+        consumerService.receive(content);
     }
 }

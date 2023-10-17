@@ -19,4 +19,3 @@ Feature: Test data
       "testdata": [{"result":"PASSED","testname":"test01","testrunId":12}]
     }
     """
-    And the following message will be published "team has been updated"

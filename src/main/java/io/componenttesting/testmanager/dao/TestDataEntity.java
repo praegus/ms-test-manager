@@ -2,7 +2,7 @@ package io.componenttesting.testmanager.dao;
 
 import lombok.Data;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Objects;
 
 @Data

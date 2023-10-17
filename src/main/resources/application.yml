@@ -2,6 +2,8 @@ metrics:
   endpoint: http://localhost:9000
   tolerance: 10
 spring:
+  application:
+    name: test-manager
   datasource:
     url: jdbc:mysql://localhost:3306/MsTestManager
     username: root
@@ -16,6 +18,10 @@ spring:
     change-log: classpath:liquibase/changelog.yaml
   jackson:
     default-property-inclusion: non_null
+  kafka:
+    consumer:
+      auto-offset-reset: earliest
+      group-id: baeldung
 springdoc:
   api-docs:
     path: /open-api

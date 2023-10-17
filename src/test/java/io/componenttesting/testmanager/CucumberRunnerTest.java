@@ -1,18 +1,24 @@
 package io.componenttesting.testmanager;
 
-import com.github.tomakehurst.wiremock.common.ConsoleNotifier;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import io.cucumber.junit.Cucumber;
-import io.cucumber.junit.CucumberOptions;
-import org.junit.ClassRule;
-import org.junit.runner.RunWith;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import io.cucumber.java.BeforeAll;
+import org.junit.platform.suite.api.*;
 
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
+import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
+import static io.cucumber.junit.platform.engine.Constants.GLUE_PROPERTY_NAME;
 
-@RunWith(Cucumber.class)
-@CucumberOptions(features = "src/test/resources")
+@Suite
+@IncludeEngines("cucumber")
+@SelectClasspathResource("io/componenttesting/testmanager")
+@ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "io.componenttesting.testmanager")
 public class CucumberRunnerTest {
 
-    @ClassRule
-    public static WireMockRule wireMockRule = new WireMockRule(options().port(8143).notifier(new ConsoleNotifier(true)));
+    private static final WireMockServer wireMockServer = new WireMockServer(WireMockConfiguration.options().port(8143));
+
+    @BeforeAll
+    public static void beforeClass() {
+        wireMockServer.start();
+        configureFor("localhost", wireMockServer.port());
+    }
 }

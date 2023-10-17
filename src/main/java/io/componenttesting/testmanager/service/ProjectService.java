@@ -1,16 +1,12 @@
 package io.componenttesting.testmanager.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.componenttesting.model.*;
 import io.componenttesting.testmanager.dao.MetricsRepository;
 import io.componenttesting.testmanager.dao.ProjectDao;
-import io.componenttesting.testmanager.event.EventPublisher;
 import io.componenttesting.testmanager.dao.ProjectEntity;
-import io.componenttesting.testmanager.model.AverageTestResults;
 import io.componenttesting.testmanager.dao.TestDataEntity;
-import javassist.NotFoundException;
+import io.componenttesting.testmanager.exceptions.NotFoundException;
+import io.componenttesting.testmanager.model.AverageTestResults;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,15 +27,10 @@ public class ProjectService {
     private ProjectDao projectDao;
 
     @Autowired
-    private EventPublisher eventPublisher;
-
-    @Autowired
     private MetricsRepository metricsRepository;
 
     @Value("${metrics.tolerance}")
     private int metricTolerance;
-
-    private final ObjectMapper objectMapper = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
     @SneakyThrows
     public ProjectResponse getProject(String projectName) {
@@ -89,19 +80,7 @@ public class ProjectService {
         return project;
     }
 
-    public void handleNewHappening(String projectName, String content) throws JsonProcessingException {
-        TestDataEvent event = objectMapper.readValue(content, TestDataEvent.class);
-        Optional<ProjectEntity> entity = projectDao.findByNameIgnoreCase(projectName);
-
-        if (entity.isPresent()) {
-            updateTeamBasedOnEvent(entity.get(), event);
-            eventPublisher.publishMessageEvent(projectName, "team has been updated");
-        } else {
-            LOGGER.info("project {} does not exist, please use our amazing api to create a new project before using the event platform", projectName);
-        }
-    }
-
-    private void updateTeamBasedOnEvent(ProjectEntity entity, TestDataEvent event) {
+    public void updateTeamBasedOnEvent(ProjectEntity entity, TestDataEvent event) {
         LOGGER.info("updating project {}", event.getProject());
         TestDataEntity testdata = new TestDataEntity();
         testdata.setTestname(event.getTestName());

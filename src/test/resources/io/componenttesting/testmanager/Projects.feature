@@ -1,28 +1,23 @@
 Feature: Projecten beheren
 
   Scenario: I should be able to create a new project
-    When I use "/api/projects/" to send:
+    When I use "/api/projects" to send:
     """
-    {
-      "name": "Fin"
-    }
+    { "name": "Fin" }
     """
     Then path "/api/projects/Fin" should exist and give me:
     """
     {
       "name": "Fin",
-      "rating": null,
       "testdata": []
     }
     """
 
   Scenario Outline: A team should always have a unique name - <name>
     Given project "<existing>" exists
-    When I use "/api/projects/" to send:
+    When I use "/api/projects" to send:
     """
-    {
-      "name": "<name>"
-    }
+    { "name": "<name>" }
     """
     Then I should receive a <status> status code
 
