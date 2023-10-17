@@ -21,7 +21,8 @@ spring:
   kafka:
     consumer:
       auto-offset-reset: earliest
-      group-id: baeldung
+      group-id: test-manager
+      bootstrap-servers: localhost:9092
 springdoc:
   api-docs:
     path: /open-api

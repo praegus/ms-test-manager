@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
-//@EnableKafkaStreams
 public class TestManagerApplication {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(TestManagerApplication.class);
