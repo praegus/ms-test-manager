@@ -4,21 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="897d49c9-8fcf-4c94-aae7-f2278348b559" name="Changes" comment="update zodat de volgende die dit project cloned wel de gegenereerde api modellen krijgt">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/application-cucumber.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/io/componenttesting/testmanager/ComponentTestConfiguration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/io/componenttesting/testmanager/CucumberRunnerTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/io/componenttesting/testmanager/steps/ApiSteps.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/io/componenttesting/testmanager/steps/EventSteps.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/io/componenttesting/testmanager/steps/TestdataSteps.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/resources/features/Projects.feature" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/resources/features/Rating.feature" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/resources/features/Testdata.feature" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/resources/mappings/average-test-results.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+    <list default="true" id="897d49c9-8fcf-4c94-aae7-f2278348b559" name="Changes" comment="dependencies geupdate">
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/componenttesting/testmanager/TestManagerApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/componenttesting/testmanager/TestManagerApplication.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +25,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="complete" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -64,7 +51,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "last_opened_file_path": "C:/repos/ms-test-manager",
-    "project.structure.last.edited": "Modules",
+    "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "preferences.pluginManager"
@@ -124,7 +111,14 @@
       <option name="project" value="LOCAL" />
       <updated>1663835377132</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="dependencies geupdate">
+      <created>1697550861193</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1697550861193</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -140,7 +134,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="update zodat de volgende die dit project cloned wel de gegenereerde api modellen krijgt" />
-    <option name="LAST_COMMIT_MESSAGE" value="update zodat de volgende die dit project cloned wel de gegenereerde api modellen krijgt" />
+    <MESSAGE value="dependencies geupdate" />
+    <option name="LAST_COMMIT_MESSAGE" value="dependencies geupdate" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
