@@ -12,6 +12,7 @@ De service bevat de meest complexe technische uitdagingen van component testen:
 De microservice biedt rest api's om projecten te beheren. 
 Daarnaast wordt geluistert naar test resultaat events, die toegevoegd worden aan de projecten.
 Vanuit een externe service wordt het 'gemiddelde aantal slagende testen' opgehaald, zodat ieder project een Rating kan krijgen hoe goed deze presteert ten opzichte van het gemiddelde.
+Zodra een project geupdate is met testresultaten wordt een event uitgestuurd met de naam van het project dat geupdate is.
 
 ## Cucumber configuratie
 - io.componenttesting.testmanager.CucumberRunnerTest.java is onze test runner met annotations om cucumber vanuit junit te kunnen draaien
@@ -38,11 +39,8 @@ Vanuit een externe service wordt het 'gemiddelde aantal slagende testen' opgehaa
 We genereren de interface en models obv specs.yml in het project. Hierdoor moet je altijd eerst `mvn compile` uitvoeren voordat je de testen kunt draaien.
 
 ### Dependencies voor lokaal starten
-#### Lokaal opstarten van kafka
-https://kafka.apache.org/quickstart
-
-#### Lokaal starten van mysql
-https://dev.mysql.com/doc/mysql-getting-started/en/
+Om zowel kafka als de postgres database lokaal te starten is een docker-compose.yml bestand aangemaakt.
+Je kunt deze services starten door het commando `docker-compose up -d` te draaien
 
 #### Niet bestaande dependency service
 Het project heeft ook op http://localhost:9000 een service nodig die een AverageTestResults terug kan geven. Deze service bestaat niet, waardoor het ophalen van projecten een 500 gaat opleveren.
@@ -63,7 +61,7 @@ stappen om component testen op te zetten:
 2. Maak een cucumber application yml aan die de database switched naar H2, laat de componenttestconfiguration gebruik maken van het cucumber profile, en voeg H2 dependencies toe
    resultaat hoort te zijn dat de applicatie nu niet opstart vanwege connectie met kafka
 
-3. Switch de dependency van spring boot starter naar spring-cloud-stream-test-support
+3. Update de ComponentTestConfiguration zodat EmbeddedKafka opgestart wordt
    resultaat hoort nu te zijn dat de applicatie opstart en het scenario faalt op missende stappen
 
 4. Maak de missende ApiSteps
