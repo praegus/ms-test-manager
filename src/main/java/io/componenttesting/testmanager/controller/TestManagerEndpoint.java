@@ -3,28 +3,21 @@ package io.componenttesting.testmanager.controller;
 import io.componenttesting.api.ApiApi;
 import io.componenttesting.model.ProjectCreate;
 import io.componenttesting.model.ProjectResponse;
-import io.componenttesting.testmanager.dao.ProjectDao;
-import io.componenttesting.testmanager.dao.ProjectEntity;
 import io.componenttesting.testmanager.exceptions.NotFoundException;
 import io.componenttesting.testmanager.service.ProjectService;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class TestManagerEndpoint implements ApiApi {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(TestManagerEndpoint.class);
-
-    @Autowired
-    ProjectDao projectDao;
 
     @Autowired
     ProjectService projectService;
@@ -48,25 +41,13 @@ public class TestManagerEndpoint implements ApiApi {
 
     @Override
     public ResponseEntity<Void> createProjects(@RequestBody @Valid ProjectCreate project) {
-        try {
-            projectService.createNewProject(project);
-        } catch (Error e) {
-            throw new InvalidArgumentException();
-        }
+        projectService.createNewProject(project);
         return null;
     }
 
     @Override
     public ResponseEntity<Void> deleteProject(String projectName) {
-        Optional<ProjectEntity> result = projectDao.findByNameIgnoreCase(projectName);
-        if (result.isPresent()) {
-            projectDao.delete(result.get());
-            LOGGER.info("project {} was deleted", projectName);
-        }
+        projectService.deleteProject(projectName);
         return null;
-    }
-
-    @ResponseStatus(code = HttpStatus.UNPROCESSABLE_ENTITY)
-    public class InvalidArgumentException extends RuntimeException {
     }
 }

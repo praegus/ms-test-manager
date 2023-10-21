@@ -5,9 +5,12 @@ import io.componenttesting.testmanager.dao.MetricsRepository;
 import io.componenttesting.testmanager.dao.ProjectDao;
 import io.componenttesting.testmanager.dao.ProjectEntity;
 import io.componenttesting.testmanager.dao.TestDataEntity;
+import io.componenttesting.testmanager.event.KafkaProducerService;
+import io.componenttesting.testmanager.exceptions.InvalidArgumentException;
 import io.componenttesting.testmanager.exceptions.NotFoundException;
 import io.componenttesting.testmanager.model.AverageTestResults;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Log4j2
 public class ProjectService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProjectService.class);
@@ -28,6 +32,9 @@ public class ProjectService {
 
     @Autowired
     private MetricsRepository metricsRepository;
+
+    @Autowired
+    private KafkaProducerService producerService;
 
     @Value("${metrics.tolerance}")
     private int metricTolerance;
@@ -51,7 +58,6 @@ public class ProjectService {
     }
 
 
-
     private ProjectResponse calculateProjectRating(ProjectResponse projectResponse, AverageTestResults averageTestResults) {
         if (projectResponse.getTestdata().isEmpty()) {
             return projectResponse;
@@ -60,8 +66,8 @@ public class ProjectService {
         int passedPercentage = Long.valueOf((passedTests * 100) / projectResponse.getTestdata().size()).intValue();
         Rating rating =
                 passedPercentage >= averageTestResults.getAveragePassingPercentage() ? Rating.GOOD :
-                passedPercentage + metricTolerance >= averageTestResults.getAveragePassingPercentage() ? Rating.AVERAGE :
-                Rating.POOR;
+                        passedPercentage + metricTolerance >= averageTestResults.getAveragePassingPercentage() ? Rating.AVERAGE :
+                                Rating.POOR;
         projectResponse.setRating(rating);
 
         return projectResponse;
@@ -94,7 +100,7 @@ public class ProjectService {
 
     public void createNewProject(ProjectCreate project) {
         if (projectDao.findByNameIgnoreCase(project.getName()).isPresent()) {
-            throw new Error("Project already exists, please use a unique team name");
+            throw new InvalidArgumentException("Project already exists, please use a unique team name");
         } else {
             ProjectEntity newEntity = new ProjectEntity();
             newEntity.setName(project.getName());
@@ -102,6 +108,26 @@ public class ProjectService {
             projectDao.save(newEntity);
 
             LOGGER.info("new project {} added", project.getName());
+        }
+    }
+
+    public void triggerNewTestData(TestDataEvent event) {
+        Optional<ProjectEntity> entity = projectDao.findByNameIgnoreCase(event.getProject());
+        if (entity.isPresent()) {
+            updateTeamBasedOnEvent(entity.get(), event);
+            producerService.sendMessage(event.getProject());
+        } else {
+            log.info("project {} does not exist, please use our amazing api to create a new project before using the event platform", event.getProject());
+        }
+    }
+
+    public void deleteProject(String projectName) {
+        var result = projectDao.findByNameIgnoreCase(projectName);
+        if (result.isPresent()) {
+            projectDao.delete(result.get());
+            LOGGER.info("project {} was deleted", projectName);
+        } else {
+            throw new NotFoundException("project " + projectName + " was not found.");
         }
     }
 }

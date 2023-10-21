@@ -3,18 +3,59 @@ package io.componenttesting.testmanager.steps;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.componenttesting.model.TestDataEvent;
-import io.componenttesting.testmanager.event.KafkaConsumerService;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
+import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.core.DefaultKafkaProducerFactory;
+import org.springframework.kafka.listener.ContainerProperties;
+import org.springframework.kafka.listener.KafkaMessageListenerContainer;
+import org.springframework.kafka.listener.MessageListener;
+import org.springframework.kafka.test.EmbeddedKafkaBroker;
+import org.springframework.kafka.test.utils.ContainerTestUtils;
+import org.springframework.kafka.test.utils.KafkaTestUtils;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class EventSteps {
 
     @Autowired
-    private KafkaConsumerService consumerService;
+    private EmbeddedKafkaBroker embeddedKafkaBroker;
+    private BlockingQueue<ConsumerRecord<String, String>> records;
+    private KafkaMessageListenerContainer<String, String> container;
 
-    @When("project {string} has received the following testdata:")
-    public void sendTestData(String project, String testDataEvent) throws JsonProcessingException {
-        sendInEvent(project, testDataEvent);
+    @Before
+    public void setUp() {
+        Map<String, Object> configs = new HashMap<>(KafkaTestUtils.consumerProps("consumer", "false", embeddedKafkaBroker));
+        DefaultKafkaConsumerFactory<String, String> consumerFactory = new DefaultKafkaConsumerFactory<>(configs, new StringDeserializer(), new StringDeserializer());
+        ContainerProperties containerProperties = new ContainerProperties("project");
+        container = new KafkaMessageListenerContainer<>(consumerFactory, containerProperties);
+        records = new LinkedBlockingQueue<>();
+        container.setupMessageListener((MessageListener<String, String>) records::add);
+        container.start();
+        ContainerTestUtils.waitForAssignment(container, embeddedKafkaBroker.getPartitionsPerTopic());
+    }
+    @After
+    public void stop() {
+        container.stop();
+    }
+
+    @When("the following testdata was received on topic {string}:")
+    public void sendTestData(String topic, String testDataEvent) {
+        sendInEvent(topic, testDataEvent);
     }
 
     @When("project {string} has received {int} passing tests and {int} failing tests")
@@ -28,17 +69,28 @@ public class EventSteps {
         for (int i=0;i<passing;i++) {
             testData.setTestRunId(iteration++);
             testData.setResult("PASSED");
-            sendInEvent(project, mapper.writeValueAsString(testData));
+            sendInEvent("testdata", mapper.writeValueAsString(testData));
         }
 
         for (int i=0;i<failing;i++) {
             testData.setTestRunId(iteration++);
             testData.setResult("FAILED");
-            sendInEvent(project, mapper.writeValueAsString(testData));
+            sendInEvent("testdata", mapper.writeValueAsString(testData));
         }
     }
 
-    private void sendInEvent(String projectName, String content) throws JsonProcessingException {
-        consumerService.receive(content);
+    @Then("an event with message {string} will be published to the topic {string}")
+    public void checkPublish(String message, String topic) throws InterruptedException {
+        ConsumerRecord<String, String> singleRecord = records.poll(100, TimeUnit.MILLISECONDS);
+        assertThat(singleRecord).isNotNull();
+        assertThat(singleRecord.topic()).isEqualTo(topic);
+        assertThat(singleRecord.value()).isEqualTo(message);
+    }
+
+    private void sendInEvent(String topic, String content) {
+        Map<String, Object> producerConfigs = new HashMap<>(KafkaTestUtils.producerProps(embeddedKafkaBroker));
+        Producer<String, String> producer = new DefaultKafkaProducerFactory<>(producerConfigs, new StringSerializer(), new StringSerializer()).createProducer();
+        producer.send(new ProducerRecord<>(topic, "my-aggregate-id", content));
+        producer.flush();
     }
 }

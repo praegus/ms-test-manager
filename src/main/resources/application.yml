@@ -5,24 +5,27 @@ spring:
   application:
     name: test-manager
   datasource:
-    url: jdbc:mysql://localhost:3306/MsTestManager
-    username: root
-    password: r00TUser123#
-    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:postgresql://localhost:5432/postgres?useSSL=false
+    username: postgres
+    password: p@ssword
+    driverClassName: org.postgresql.Driver
   jpa:
     show-sql: true
     hibernate:
-      dialect: org.hibernate.dialect.SQLServer2012Dialect
-      ddl-auto: create-drop
+      dialect: org.hibernate.dialect.PostgreSQL81Dialect
+      ddl-auto: update
   liquibase:
     change-log: classpath:liquibase/changelog.yaml
   jackson:
     default-property-inclusion: non_null
   kafka:
+    bootstrap-servers: localhost:29092
     consumer:
       auto-offset-reset: earliest
       group-id: test-manager
-      bootstrap-servers: localhost:9092
+    template:
+      default-topic: my-topic
+
 springdoc:
   api-docs:
     path: /open-api

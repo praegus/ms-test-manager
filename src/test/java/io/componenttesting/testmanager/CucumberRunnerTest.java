@@ -3,7 +3,10 @@ package io.componenttesting.testmanager;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import io.cucumber.java.BeforeAll;
-import org.junit.platform.suite.api.*;
+import org.junit.platform.suite.api.ConfigurationParameter;
+import org.junit.platform.suite.api.IncludeEngines;
+import org.junit.platform.suite.api.SelectClasspathResource;
+import org.junit.platform.suite.api.Suite;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
 import static io.cucumber.junit.platform.engine.Constants.GLUE_PROPERTY_NAME;
