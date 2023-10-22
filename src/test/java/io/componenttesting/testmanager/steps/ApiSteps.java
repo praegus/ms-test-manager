@@ -45,6 +45,6 @@ public class ApiSteps {
     }
 
     private RequestSpecification baseRequest() {
-        return given().port(port);
+        return given().auth().basic("user", "p@ssword").port(port);
     }
 }

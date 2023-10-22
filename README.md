@@ -7,6 +7,7 @@ De service bevat de meest complexe technische uitdagingen van component testen:
 - rest based interactie
 - een database
 - een service waar je afhankelijk van bent
+- authentication
 
 ### Functionaliteit
 De microservice biedt rest api's om projecten te beheren. 
@@ -66,6 +67,7 @@ stappen om component testen op te zetten:
 
 4. Maak de missende ApiSteps
    hier de focus op goeie herbruikbare step defs (soms ook hele specifieke step defs nodig, maar dat is hier niet het geval)
+   zorg er hier ook voor dat je basic authentication opzet om calls te kunnen doen (user/p@ssword)
    resultaat is dat het scenario nu slaagt
 
 5. Breid de scenarios uit met het ophalen van een project
