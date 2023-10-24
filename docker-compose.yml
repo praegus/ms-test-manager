@@ -29,20 +29,6 @@ services:
     environment:
       POSTGRES_PASSWORD: p@ssword
 
-  keycloak:
-    image: quay.io/keycloak/keycloak:22.0
-    volumes:
-      - ./imports:/opt/keycloak/data/import
-    environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin123
-    ports:
-      - "8080:8080"
-      - "8787:8787"
-    command:
-      - start-dev
-      - --import-realm
-
   wiremock:
     image: wiremock/wiremock:3.2.0
     ports:

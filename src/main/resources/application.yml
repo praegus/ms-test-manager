@@ -32,7 +32,7 @@ spring:
       resourceserver:
         jwt:
           jws-algorithm: RS256
-          jwk-set-uri: http://localhost:4000/jwks.json
+          jwk-set-uri: http://localhost:9000/jwks.json
 
 springdoc:
   api-docs:
