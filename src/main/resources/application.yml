@@ -1,6 +1,8 @@
 metrics:
   endpoint: http://localhost:9000
   tolerance: 10
+server:
+  port: 8081
 spring:
   application:
     name: test-manager
@@ -25,9 +27,21 @@ spring:
       group-id: test-manager
     template:
       default-topic: my-topic
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jws-algorithm: RS256
+          jwk-set-uri: http://localhost:4000/jwks.json
 
 springdoc:
   api-docs:
     path: /open-api
   swagger-ui:
     path: /
+
+logging:
+  level:
+    org.springframework.security: INFO
+  pattern:
+    console: '%d{dd-MM-yyyy HH:mm:ss} %magenta([%thread]) %highlight(%-5level) %logger.%M - %msg%n'

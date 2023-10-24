@@ -34,32 +34,24 @@ public class EventSteps {
 
     @Autowired
     private EmbeddedKafkaBroker embeddedKafkaBroker;
-    private static BlockingQueue<ConsumerRecord<String, String>> records;
+    private BlockingQueue<ConsumerRecord<String, String>> records;
+    private KafkaMessageListenerContainer<String, String> container;
 
-    private static Producer<String, String> producer;
-
-    private static boolean hasStarted = false;
     @Before
     public void setUp() {
-        if (!hasStarted) {
-            hasStarted = true;
-            Map<String, Object> configs = new HashMap<>(KafkaTestUtils.consumerProps("consumer", "false", embeddedKafkaBroker));
-            DefaultKafkaConsumerFactory<String, String> consumerFactory = new DefaultKafkaConsumerFactory<>(configs, new StringDeserializer(), new StringDeserializer());
-            ContainerProperties containerProperties = new ContainerProperties("project");
-            KafkaMessageListenerContainer<String, String> container = new KafkaMessageListenerContainer<>(consumerFactory, containerProperties);
-            records = new LinkedBlockingQueue<>();
-            container.setupMessageListener((MessageListener<String, String>) records::add);
-            container.start();
-            ContainerTestUtils.waitForAssignment(container, embeddedKafkaBroker.getPartitionsPerTopic());
-
-            Map<String, Object> producerConfigs = new HashMap<>(KafkaTestUtils.producerProps(embeddedKafkaBroker));
-            producer = new DefaultKafkaProducerFactory<>(producerConfigs, new StringSerializer(), new StringSerializer()).createProducer();
-        }
+        Map<String, Object> configs = new HashMap<>(KafkaTestUtils.consumerProps("consumer", "false", embeddedKafkaBroker));
+        DefaultKafkaConsumerFactory<String, String> consumerFactory = new DefaultKafkaConsumerFactory<>(configs, new StringDeserializer(), new StringDeserializer());
+        ContainerProperties containerProperties = new ContainerProperties("project");
+        container = new KafkaMessageListenerContainer<>(consumerFactory, containerProperties);
+        records = new LinkedBlockingQueue<>();
+        container.setupMessageListener((MessageListener<String, String>) records::add);
+        container.start();
+        ContainerTestUtils.waitForAssignment(container, embeddedKafkaBroker.getPartitionsPerTopic());
     }
 
     @After
     public void cleanUp() {
-        records.clear();
+        container.stop();
     }
 
     @When("the following testdata was received on topic {string}:")
@@ -97,6 +89,8 @@ public class EventSteps {
     }
 
     private void sendInEvent(String topic, String content) {
+        Map<String, Object> producerConfigs = new HashMap<>(KafkaTestUtils.producerProps(embeddedKafkaBroker));
+        Producer<String, String> producer = new DefaultKafkaProducerFactory<>(producerConfigs, new StringSerializer(), new StringSerializer()).createProducer();
         producer.send(new ProducerRecord<>(topic, "my-aggregate-id", content));
         producer.flush();
     }

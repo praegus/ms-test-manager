@@ -8,3 +8,8 @@ spring:
     password:
     schema:
     driverClassName: org.h2.Driver
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8143/jwks.json
