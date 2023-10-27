@@ -1,5 +1,7 @@
 package io.componenttesting.testmanager.steps;
 
+import io.cucumber.java.Before;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.http.ContentType;
@@ -12,10 +14,33 @@ import static io.restassured.RestAssured.given;
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 
 public class ApiSteps {
+
+    enum Tokens {
+        WRITE("eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMiwic2NvcGUiOiJ3cml0ZSIsInJvbGVzIjpbInBlcm1pc3Npb246d3JpdGUiXX0.QJ7kRXFMpBBbokrIcqCUbgaZny9AfbYQOd0DxQtfiAW--MmX88vNhcB783-6QtaWiWQJERoWSade1kGpM4-knhcmdnAxRMqT-KqqSmHPJVIwmYUE1EyMBuZhivnWoEARcYWdOCRKVuXCcUMncNI03gnEDMRjnc-IAlCw2-iesTOj6W92y0LAMHRYWAUe_p7duoMHGjFyIFd8lZbt6vfL4qLBX5fyx64C8M3w9jxjDs4jbZj1vCgvdCGoXbLKkMUNXmmUirMa6vr5tQlVrIFsZnF9R6SS2PR1uQDNB9Ge4GTcTgKO8tS-fq7UPSki14Y20U8MEzRNuRBXuoR6kLRL6A"),
+        READ("eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMiwic2NvcGUiOiJyZWFkIn0.oKqn5Ojv8S28xexWufKPXjmu-hDyUq8fEtINL8jOenfeDOfjGUNbirmFLiNrqRe-WUYROL0Xz_abVOi2FtXxw2PU4gdZy7MQDpmpYT1upciOWhgKckRU69Y2ZKy9pmdQrLBcG78cYxW9YSTrLo7od0R95jXHKOTrqixGguMSqBfbTvHUGBuONLFHx97lwiDLMCxqifTyqXvUdh3HL-rFHVo9SgNw46Fvnsek6AbDwNt47VsENpEMbZ3i39zRG0gNOllPtqRyqtOeU6isy_OUjaeda4MscBHlHfjkd_CklT5HAiai2ZnhkmTcdwBB7-TGjKlGIRhIUJ9TkATw-rPYrg"),
+        INVALID("eyMan");
+        public final String label;
+        Tokens(String label) {
+            this.label = label;
+        }
+    }
+
     @LocalServerPort
     protected int port;
 
     protected Response response;
+
+    protected String currentToken;
+
+    @Before
+    public void setToken() {
+        currentToken = Tokens.WRITE.label;
+    }
+
+    @Given("I use {word} token")
+    public void useToken(String type){
+        currentToken = Tokens.valueOf(type.toUpperCase()).label;
+    }
 
     @When("I use {string} to send:")
     public void postMessage(String path, String message) {
@@ -45,6 +70,6 @@ public class ApiSteps {
     }
 
     private RequestSpecification baseRequest() {
-        return given().auth().oauth2("eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.NHVaYe26MbtOYhSKkoKYdFVomg4i8ZJd8_-RU8VNbftc4TSMb4bXP3l3YlNWACwyXPGffz5aXHc6lty1Y2t4SWRqGteragsVdZufDn5BlnJl9pdR_kdVFUsra2rWKEofkZeIC4yWytE58sMIihvo9H1ScmmVwBcQP6XETqYd0aSHp1gOa9RdUPDvoXQ5oqygTqVtxaDr6wUFKrKItgBMzWIdNZ6y7O9E0DhEPTbE9rfBo6KTFsHAZnMg4k68CDp2woYIaXbmYTWcvbzIuHO7_37GT79XdIwkm95QJ7hYC9RiwrV7mesbY4PAahERJawntho0my942XheVLmGwLMBkQ").port(port);
+        return given().auth().oauth2(currentToken).port(port);
     }
 }

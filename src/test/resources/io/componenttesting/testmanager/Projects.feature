@@ -1,4 +1,4 @@
-Feature: Projecten beheren
+Feature: Project CRUD
 
   Scenario: I should be able to create a new project
     When I use "/api/projects" to send:

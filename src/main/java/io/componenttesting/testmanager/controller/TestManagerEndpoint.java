@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,12 +41,14 @@ public class TestManagerEndpoint implements ApiApi {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SCOPE_write')")
     public ResponseEntity<Void> createProjects(@RequestBody @Valid ProjectCreate project) {
         projectService.createNewProject(project);
         return null;
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SCOPE_write')")
     public ResponseEntity<Void> deleteProject(String projectName) {
         projectService.deleteProject(projectName);
         return null;
