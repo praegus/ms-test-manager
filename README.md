@@ -43,10 +43,6 @@ We genereren de interface en models obv specs.yml in het project. Hierdoor moet 
 Om zowel kafka als de postgres database lokaal te starten is een docker-compose.yml bestand aangemaakt.
 Je kunt deze services starten door het commando `docker-compose up -d` te draaien
 
-#### Niet bestaande dependency service
-Het project heeft ook op http://localhost:9000 een service nodig die een AverageTestResults terug kan geven. Deze service bestaat niet, waardoor het ophalen van projecten een 500 gaat opleveren.
-De microservice kan wel opgestart worden zonder deze service, je krijgt de 500 errors pas zodra je rest calls doet.
-
 #### Opstarten van het project
 `mvn spring-boot:run`
 
@@ -82,10 +78,13 @@ stappen om component testen op te zetten:
    Hiervoor ga je een nieuwe step def class aanmaken TestDataSteps.java
    resultaat is dat project feature file nu af is
 
-8. Voeg een scenario toe voor het binnenhalen van testdata
+8. Voeg een feature file toe om de authenticatie en autorisatie van de applicatie te testen
+   Voor het aanmaken en verwijderen van een project heb je de volgende inhoud in je jwt token nodig `"scope" : "write"`
+
+9. Voeg een feature toe voor het binnenhalen van testdata
    hiervoor moet een nieuwe EventSteps.java toegevoegd worden met de complexe logica om events te kunnen gebruiken
 
-9. Rating scenario toevoegen
+10. Rating feature toevoegen
    We hebben een mock toegevoegd die 70% als average teruggeeft, 10% is de current tolerance. Zet deze waardes bovenaan in je feature file
    voeg een Scenario Outline toe met 3 examples die een project op GOOD, AVERAGE, en POOR laten uitkomen. Hou hierbij rekening met het gebruik van grenswaardes
    resultaat is dat we nu klaar zijn

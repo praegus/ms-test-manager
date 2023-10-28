@@ -31,6 +31,9 @@ public class ProjectService {
     private ProjectDao projectDao;
 
     @Autowired
+    private ProjectMapper mapper;
+
+    @Autowired
     private MetricsRepository metricsRepository;
 
     @Autowired
@@ -44,7 +47,7 @@ public class ProjectService {
         Optional<ProjectEntity> result = projectDao.findByNameIgnoreCase(projectName);
         if (result.isPresent()) {
             AverageTestResults averageTestResults = metricsRepository.getAverageTestPassing();
-            ProjectResponse project = map(result.get());
+            ProjectResponse project = mapper.map(result.get());
             return calculateProjectRating(project, averageTestResults);
         } else {
             throw new NotFoundException("project " + projectName + " was not found.");
@@ -54,7 +57,7 @@ public class ProjectService {
     public List<ProjectResponse> getAllProjects() {
         List<ProjectEntity> result = projectDao.findAll();
         AverageTestResults averageTestResults = metricsRepository.getAverageTestPassing();
-        return result.stream().map(project -> calculateProjectRating(map(project), averageTestResults)).collect(Collectors.toList());
+        return result.stream().map(project -> calculateProjectRating(mapper.map(project), averageTestResults)).collect(Collectors.toList());
     }
 
 
@@ -65,25 +68,12 @@ public class ProjectService {
         long passedTests = projectResponse.getTestdata().stream().filter(testData -> "PASSED".equalsIgnoreCase(testData.getResult())).count();
         int passedPercentage = Long.valueOf((passedTests * 100) / projectResponse.getTestdata().size()).intValue();
         Rating rating =
-                passedPercentage >= averageTestResults.getAveragePassingPercentage() ? Rating.GOOD :
-                        passedPercentage + metricTolerance >= averageTestResults.getAveragePassingPercentage() ? Rating.AVERAGE :
+                passedPercentage >= averageTestResults.averagePassingPercentage() ? Rating.GOOD :
+                        passedPercentage + metricTolerance >= averageTestResults.averagePassingPercentage() ? Rating.AVERAGE :
                                 Rating.POOR;
         projectResponse.setRating(rating);
 
         return projectResponse;
-    }
-
-    private ProjectResponse map(ProjectEntity entity) {
-        ProjectResponse project = new ProjectResponse();
-        project.setName(entity.getName());
-        project.setTestdata(entity.getTestdata().stream().map((td) -> {
-            TestData testData = new TestData();
-            testData.setResult(td.getResult());
-            testData.setTestrunId(td.getTestrunId());
-            testData.setTestname(td.getTestname());
-            return testData;
-        }).collect(Collectors.toList()));
-        return project;
     }
 
     public void updateTeamBasedOnEvent(ProjectEntity entity, TestDataEvent event) {

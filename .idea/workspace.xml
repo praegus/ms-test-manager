@@ -4,7 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="897d49c9-8fcf-4c94-aae7-f2278348b559" name="Changes" comment="now get jwt tokens working!" />
+    <list default="true" id="897d49c9-8fcf-4c94-aae7-f2278348b559" name="Changes" comment="nu ook met autorisatie checks">
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/componenttesting/testmanager/service/ProjectMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/componenttesting/testmanager/model/AverageTestResults.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/componenttesting/testmanager/model/AverageTestResults.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/componenttesting/testmanager/service/ProjectService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/componenttesting/testmanager/service/ProjectService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/io/componenttesting/testmanager/steps/ApiSteps.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/io/componenttesting/testmanager/steps/ApiSteps.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/io/componenttesting/testmanager/Authorization.feature" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/io/componenttesting/testmanager/Authorization.feature" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -17,6 +28,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -48,7 +60,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "C:/repos/ms-test-manager/src/test/resources/mappings",
+    "last_opened_file_path": "C:/repos/ms-test-manager/src/test/resources/io/componenttesting/testmanager",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
@@ -57,6 +69,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\repos\ms-test-manager\src\test\resources\io\componenttesting\testmanager" />
       <recent name="C:\repos\ms-test-manager\src\test\resources\mappings" />
       <recent name="C:\repos\ms-test-manager\src\main\resources" />
     </key>
@@ -70,7 +83,7 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.TestManagerApplication">
+  <component name="RunManager" selected="JUnit.CucumberRunnerTest">
     <configuration name="TestManagerApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="io.componenttesting.testmanager.TestManagerApplication" />
       <module name="testmanager" />
@@ -95,8 +108,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.TestManagerApplication" />
         <item itemvalue="JUnit.CucumberRunnerTest" />
+        <item itemvalue="Application.TestManagerApplication" />
       </list>
     </recent_temporary>
   </component>
@@ -165,7 +178,21 @@
       <option name="project" value="LOCAL" />
       <updated>1698180348702</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="keycloak niet meer nodig omdat we geen jwt validaties doen,zolang het maar rs256 is">
+      <created>1698180756557</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1698180756557</updated>
+    </task>
+    <task id="LOCAL-00010" summary="nu ook met autorisatie checks">
+      <created>1698445783603</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1698445783603</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -188,7 +215,9 @@
     <MESSAGE value="gebruik beforeAll om records en producer op te zetten" />
     <MESSAGE value="workspace toevoegen" />
     <MESSAGE value="now get jwt tokens working!" />
-    <option name="LAST_COMMIT_MESSAGE" value="now get jwt tokens working!" />
+    <MESSAGE value="keycloak niet meer nodig omdat we geen jwt validaties doen,zolang het maar rs256 is" />
+    <MESSAGE value="nu ook met autorisatie checks" />
+    <option name="LAST_COMMIT_MESSAGE" value="nu ook met autorisatie checks" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

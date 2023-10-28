@@ -1,8 +1,7 @@
 Feature: Project authorization
 
   Scenario Outline: I need WRITE access to create a project
-    Given I use <type> token
-    When I use "/api/projects" to send:
+    When I use "/api/projects" with a <type> token to send:
     """
     { "name": "<name>" }
     """
