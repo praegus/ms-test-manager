@@ -9,7 +9,9 @@ import net.javacrumbs.jsonunit.core.Option;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
 import static io.restassured.RestAssured.given;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
+import static org.awaitility.Awaitility.await;
 
 public class ApiSteps {
     @LocalServerPort
@@ -24,8 +26,10 @@ public class ApiSteps {
 
     @Then("path {string} should exist and give me:")
     public void assertCallResponse(String path, String expectedBody) {
-        response = baseRequest().when().get(path);
-        assertThatJson(response.getBody().prettyPrint()).when(Option.IGNORING_ARRAY_ORDER).isEqualTo(expectedBody);
+        await().atMost(5, SECONDS).untilAsserted(() -> {
+            response = baseRequest().when().get(path);
+            assertThatJson(response.getBody().prettyPrint()).when(Option.IGNORING_ARRAY_ORDER).isEqualTo(expectedBody);
+        });
     }
 
     @Then("I should receive a {int} status code")
