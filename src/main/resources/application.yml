@@ -13,9 +13,12 @@ spring:
     driverClassName: org.postgresql.Driver
   jpa:
     show-sql: true
+    open-in-view: true
     hibernate:
       dialect: org.hibernate.dialect.PostgreSQL81Dialect
       ddl-auto: update
+    properties:
+      jakarta.persistence.sharedCache.mode: NONE
   liquibase:
     change-log: classpath:liquibase/changelog.yaml
   jackson:
