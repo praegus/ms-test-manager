@@ -1,14 +1,17 @@
-Feature: Project CRUD
+Feature: Projecten beheren
 
   Scenario: I should be able to create a new project
     When I use "/api/projects" to send:
     """
-    { "name": "Fin" }
+    {
+      "name": "ProjectX"
+    }
     """
-    Then path "/api/projects/Fin" should exist and give me:
+    Then path "/api/projects/ProjectX" should exist and give me:
     """
     {
-      "name": "Fin",
+      "name": "ProjectX",
+      "rating": null,
       "testdata": []
     }
     """
@@ -17,15 +20,17 @@ Feature: Project CRUD
     Given project "<existing>" exists
     When I use "/api/projects" to send:
     """
-    { "name": "<name>" }
+    {
+      "name": "<name>"
+    }
     """
     Then I should receive a <status> status code
 
     Examples:
-      | existing | name   | status |
-      | Fin301   | Fin301 | 422    |
-      | FIN302   | fin302 | 422    |
-      | Fin303   | Fin313 | 200    |
+      | existing   | name       | status |
+      | Project301 | Project301 | 422    |
+      | PROJECT302 | project302 | 422    |
+      | Project303 | Project313 | 200    |
 
   Scenario: I should be able to delete an existing project
     Given project "AAA" exists

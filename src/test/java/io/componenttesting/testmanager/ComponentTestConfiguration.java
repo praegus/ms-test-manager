@@ -10,5 +10,4 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("cucumber")
 @EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:29092", "port=29092" })
 public class ComponentTestConfiguration {
-
 }

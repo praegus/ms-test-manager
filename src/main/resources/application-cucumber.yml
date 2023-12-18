@@ -1,6 +1,3 @@
-metrics:
-  endpoint: http://localhost:8143
-  tolerance: 10
 spring:
   datasource:
     url: jdbc:h2:mem:projectDb;DB_CLOSE_DELAY=-1
@@ -8,8 +5,5 @@ spring:
     password:
     schema:
     driverClassName: org.h2.Driver
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: http://localhost:8143/jwks.json
+
+application.security.disabled: true
