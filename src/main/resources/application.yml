@@ -21,8 +21,6 @@ spring:
       jakarta.persistence.sharedCache.mode: NONE
   liquibase:
     change-log: classpath:liquibase/changelog.yaml
-  jackson:
-    default-property-inclusion: non_null
   kafka:
     bootstrap-servers: localhost:29092
     consumer:

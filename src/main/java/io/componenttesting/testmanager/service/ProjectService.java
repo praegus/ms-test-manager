@@ -62,7 +62,7 @@ public class ProjectService {
 
 
     private ProjectResponse calculateProjectRating(ProjectResponse projectResponse, AverageTestResults averageTestResults) {
-        if (projectResponse.getTestdata().isEmpty()) {
+        if (projectResponse.getTestdata().isEmpty() || averageTestResults == null) {
             return projectResponse;
         }
         long passedTests = projectResponse.getTestdata().stream().filter(testData -> "PASSED".equalsIgnoreCase(testData.getResult())).count();
