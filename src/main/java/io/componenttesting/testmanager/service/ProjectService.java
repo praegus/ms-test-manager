@@ -9,7 +9,6 @@ import io.componenttesting.testmanager.event.KafkaProducerService;
 import io.componenttesting.testmanager.exceptions.InvalidArgumentException;
 import io.componenttesting.testmanager.exceptions.NotFoundException;
 import io.componenttesting.testmanager.model.AverageTestResults;
-import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +41,6 @@ public class ProjectService {
     @Value("${metrics.tolerance}")
     private int metricTolerance;
 
-    @SneakyThrows
     public ProjectResponse getProject(String projectName) {
         Optional<ProjectEntity> result = projectDao.findByNameIgnoreCase(projectName);
         if (result.isPresent()) {
