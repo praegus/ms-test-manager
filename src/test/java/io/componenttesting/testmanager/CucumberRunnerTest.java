@@ -3,6 +3,7 @@ package io.componenttesting.testmanager;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import io.cucumber.java.BeforeAll;
+import io.cucumber.java.AfterAll;
 import org.junit.platform.suite.api.ConfigurationParameter;
 import org.junit.platform.suite.api.IncludeEngines;
 import org.junit.platform.suite.api.SelectClasspathResource;
@@ -22,5 +23,11 @@ public class CucumberRunnerTest {
     public static void beforeClass() {
         wireMockServer.start();
         configureFor("localhost", wireMockServer.port());
+    }
+
+    @AfterAll
+    public static void afterClass() {
+        wireMockServer.stop();
+        AuthorizationServerWireMock.stop();
     }
 }
