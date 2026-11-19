@@ -18,7 +18,7 @@
         <spring.version>6.0.3</spring.version>
         <spring-boot.version>3.0.1</spring-boot.version>
         <spring-cloud.version>2022.0.0</spring-cloud.version>
-        <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
+        <org.mapstruct.version>1.6.3</org.mapstruct.version>
         <openapi-generator.version>6.6.0</openapi-generator.version>
         <swagger-annotations.version>2.2.16</swagger-annotations.version>
         <jackson-databind.version>0.2.6</jackson-databind.version>
@@ -27,6 +27,7 @@
         <springdoc.version>2.1.0</springdoc.version>
         <json-junit.version>2.35.0</json-junit.version>
         <wiremock.version>2.27.2</wiremock.version>
+        <lombok.version>1.18.38</lombok.version>
         <start-class>io.componenttesting.testmanager.TestManagerApplication</start-class>
     </properties>
 
@@ -228,7 +229,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
+                <version>3.16.0</version>
                 <configuration>
                     <annotationProcessorPaths>
                         <path>

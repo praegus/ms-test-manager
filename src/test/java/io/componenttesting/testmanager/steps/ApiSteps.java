@@ -68,7 +68,7 @@ public class ApiSteps {
 
     private RequestSpecification baseRequest() {
         return given()
-                .auth().oauth2(AuthorizationServerWireMockOld.generateJwtToken("write"))
+                .auth().oauth2(AuthorizationServerWireMock.generateJwtToken("write"))
                 .port(port);
     }
 }
